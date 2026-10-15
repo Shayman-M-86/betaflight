@@ -1,5 +1,8 @@
 # DJI O4 unsolicited battery and arming telemetry
 
+**Just want to install it? Read the [simple user guide](O4_QUICK_START.md).**
+This page is the technical reference for developers and people building firmware.
+
 This experimental patch lets Betaflight send battery and armed-state MSP replies
 without waiting for requests from the air unit. It is intended for an O4 whose
 video and DisplayPort OSD work but whose normal battery/arming telemetry does

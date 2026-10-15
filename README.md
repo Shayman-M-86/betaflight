@@ -5,13 +5,18 @@
 
 Betaflight is flight controller software (firmware) used to fly multi-rotor craft and fixed wing craft. Betaflight focuses on flight performance, leading-edge feature additions, and wide target support.
 
-## Experimental DJI O4 telemetry workaround (this fork)
+## DJI O4 showing 0 V or not recognising arming?
 
-This branch adds an opt-in push of live battery and armed-state MSP responses
-on the configured DisplayPort UART, based on Betaflight 2026.6.2. See the
-[O4 workaround guide](O4_TELEMETRY_PUSH.md) for the evidence, implementation,
-build instructions and bench validation procedure. The feature is disabled
-unless `USE_DJI_O4_TELEMETRY_PUSH` is selected at build time.
+If video and Betaflight OSD work but DJI's own battery display and arm detection
+do not, this fork contains an experimental workaround based on stable
+Betaflight 2026.6.2.
+
+**[Start with the simple user guide](O4_QUICK_START.md)** for getting the right
+firmware, backing up, flashing and checking the result.
+
+For developers, the [technical guide](O4_TELEMETRY_PUSH.md) explains the code,
+build option and bench evidence. The workaround is on the
+`codex/o4-unsolicited-telemetry` branch; it is not part of official Betaflight.
 
 ## Release Schedule
 
