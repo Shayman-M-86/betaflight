@@ -64,6 +64,9 @@ Use the complete guide below rather than copying only a build define.
 
 ## Evidence and limits
 
+The [first-person background story](O4_STORY.md) includes the original Python
+and goggles voltage-sweep GIFs. They illustrate the voltage-only experiment.
+
 The reported bench setup was a DJI O4 Air Unit Lite connected to a NewBeeDrone
 Hummingbird AIO255. The O4 had physical PCB damage near a mounting hole.
 Video and Betaflight DisplayPort OSD worked, but DJI native voltage stayed at

@@ -14,6 +14,9 @@ Betaflight 2026.6.2.
 **[Start with the simple user guide](O4_QUICK_START.md)** for getting the right
 firmware, backing up, flashing and checking the result.
 
+For the background and actual voltage-sweep recordings, read
+[the story behind the workaround](O4_STORY.md).
+
 For developers, the [technical guide](O4_TELEMETRY_PUSH.md) explains the code,
 build option and bench evidence. The workaround is on the
 `codex/o4-unsolicited-telemetry` branch; it is not part of official Betaflight.

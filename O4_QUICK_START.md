@@ -91,6 +91,10 @@ with your FC, O4 and goggles models/firmware,
 and which checks above passed or failed. Similar symptoms can have different
 causes, so this will not fix every O4 problem or repair damaged hardware.
 
+## How was this discovered?
+
+Read [the short background story and test GIFs](O4_STORY.md).
+
 ## Want the technical details?
 
 The [technical guide](O4_TELEMETRY_PUSH.md) contains the code changes, bench
