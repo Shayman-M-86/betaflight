@@ -37,6 +37,7 @@
 #include "io/displayport_msp.h"
 
 #include "msp/msp.h"
+#include "msp/msp_protocol.h"
 
 #include "msp_serial.h"
 
@@ -643,6 +644,48 @@ void mspSerialInit(void)
     memset(mspPorts, 0, sizeof(mspPorts));
     mspSerialAllocatePorts();
 }
+
+#if defined(USE_MSP_DISPLAYPORT) && defined(USE_DJI_O4_TELEMETRY_PUSH)
+int mspSerialPushTelemetry(serialPortIdentifier_e port, uint8_t command)
+{
+    // Only read-only replies with bounded serializers: BATTERY_STATE is 11 bytes,
+    // STATUS is at most 42 bytes in 2026.6.2 (including extended mode flags).
+    if (port == SERIAL_PORT_NONE || port == SERIAL_PORT_ALL
+        || (command != MSP_BATTERY_STATE && command != MSP_STATUS)) {
+        return 0;
+    }
+
+    for (mspPort_t *mspPort = mspPorts; mspPort < ARRAYEND(mspPorts); mspPort++) {
+        if (!mspPort->port || mspPort->port->identifier != port
+            || port == SERIAL_PORT_USB_VCP
+            || mspPort->portState == PORT_CLI_CMD || mspPort->portState == PORT_CLI_ACTIVE) {
+            continue;
+        }
+
+        uint8_t payload[64];
+        mspPacket_t request = {
+            .buf = { .ptr = payload, .end = payload },
+            .cmd = command,
+            .direction = MSP_DIRECTION_REQUEST,
+        };
+        mspPacket_t reply = {
+            .buf = { .ptr = payload, .end = ARRAYEND(payload) },
+            .direction = MSP_DIRECTION_REPLY,
+        };
+
+        if (mspFcProcessCommand(mspPort->descriptor, &request, &reply, NULL) != MSP_RESULT_ACK) {
+            return 0;
+        }
+        const int length = sbufPtr(&reply.buf) - payload;
+        // Never wait for UART space, including when the TX buffer is empty.
+        if (serialTxBytesFree(mspPort->port) < (unsigned)(length + 6)) {
+            return 0;
+        }
+        return mspSerialPush(port, command, payload, length, MSP_DIRECTION_REPLY, MSP_V1);
+    }
+    return 0;
+}
+#endif
 
 int mspSerialPush(serialPortIdentifier_e port, uint8_t cmd, uint8_t *data, int datalen, mspDirection_e direction, mspVersion_e mspVersion)
 {

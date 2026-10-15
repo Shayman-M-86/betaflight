@@ -135,4 +135,8 @@ void mspSerialReleaseSharedTelemetryPorts(void);
 mspDescriptor_t getMspSerialPortDescriptor(const serialPortIdentifier_e portIdentifier);
 int mspSerialPush(serialPortIdentifier_e port, uint8_t cmd, uint8_t *data, int datalen, mspDirection_e direction, mspVersion_e mspVersion);
 uint32_t mspSerialTxBytesFree(void);
+#if defined(USE_MSP_DISPLAYPORT) && defined(USE_DJI_O4_TELEMETRY_PUSH)
+// Push live BATTERY_STATE or STATUS to one port; return 0 when skipped.
+int mspSerialPushTelemetry(serialPortIdentifier_e port, uint8_t command);
+#endif
 bool mspSerialIsConfiguratorActive(void);

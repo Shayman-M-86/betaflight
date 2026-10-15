@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "common/time.h"
+
 #include "drivers/display.h"
 
 #include "io/serial.h"
@@ -51,3 +53,6 @@ struct displayPort_s *displayPortMspInit(void);
 void displayPortMspSetSerial(serialPortIdentifier_e serialPort);
 serialPortIdentifier_e displayPortMspGetSerial(void);
 
+#if defined(USE_MSP_DISPLAYPORT) && defined(USE_DJI_O4_TELEMETRY_PUSH)
+void displayPortMspPushTelemetry(timeMs_t now);
+#endif

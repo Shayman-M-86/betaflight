@@ -45,7 +45,27 @@
 #include "pg/vcd.h"
 
 static displayPort_t mspDisplayPort;
-static serialPortIdentifier_e displayPortSerial;
+static serialPortIdentifier_e displayPortSerial = SERIAL_PORT_NONE;
+
+#ifdef USE_DJI_O4_TELEMETRY_PUSH
+#define DJI_O4_TELEMETRY_INTERVAL_MS 100
+
+void displayPortMspPushTelemetry(timeMs_t now)
+{
+    static timeMs_t lastPush;
+    const serialPortIdentifier_e port = displayPortMspGetSerial();
+    if (cliMode || port == SERIAL_PORT_NONE || port == SERIAL_PORT_ALL
+        || cmpTimeMs(now, lastPush) < DJI_O4_TELEMETRY_INTERVAL_MS) {
+        return;
+    }
+    lastPush = now;
+
+    // Only these two replies were demonstrated by the O4 passthrough tests.
+    // Payloads come from the normal serializers and contain live FC values.
+    mspSerialPushTelemetry(port, MSP_BATTERY_STATE);
+    mspSerialPushTelemetry(port, MSP_STATUS);
+}
+#endif
 
 typedef struct displayPortMspCommand_s {
     uint8_t command;

@@ -279,11 +279,13 @@ motor_output_unittest_DEFINES := \
 		USE_DSHOT=
 
 msp_serial_unittest_SRC := \
+		$(USER_DIR)/io/displayport_msp.c \
 		$(USER_DIR)/msp/msp_serial.c \
 		$(USER_DIR)/common/crc.c \
 		$(USER_DIR)/common/streambuf.c
 
 msp_serial_unittest_DEFINES := \
+		USE_DJI_O4_TELEMETRY_PUSH= \
 		USE_CLI= \
 		USE_MSP_DISPLAYPORT=
 

@@ -42,6 +42,7 @@
 #include "drivers/serial.h"
 #include "drivers/serial_usb_vcp.h"
 #include "drivers/stack_check.h"
+#include "drivers/time.h"
 #include "drivers/transponder_ir.h"
 #include "drivers/usb_io.h"
 #include "drivers/vtx_common.h"
@@ -63,6 +64,7 @@
 
 #include "io/asyncfatfs/asyncfatfs.h"
 #include "io/beeper.h"
+#include "io/displayport_msp.h"
 #include "io/dashboard.h"
 #include "io/dronecan/dronecan.h"
 #include "io/flashfs.h"
@@ -155,6 +157,9 @@ static void taskHandleSerial(timeUs_t currentTimeUs)
 
     bool evaluateMspData = ARMING_FLAG(ARMED) ? MSP_SKIP_NON_MSP_DATA : MSP_EVALUATE_NON_MSP_DATA;
     mspSerialProcess(evaluateMspData, mspFcProcessCommand, mspFcProcessReply);
+#if defined(USE_MSP_DISPLAYPORT) && defined(USE_DJI_O4_TELEMETRY_PUSH)
+    displayPortMspPushTelemetry(millis());
+#endif
 }
 
 static void taskBatteryAlerts(timeUs_t currentTimeUs)
