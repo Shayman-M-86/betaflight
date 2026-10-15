@@ -12,9 +12,10 @@ We have made a software workaround that may help this combination of symptoms.
 It runs on the flight controller. You do not need to change the O4 firmware or
 keep a computer connected after installation.
 
-**Experimental:** this is based on stable Betaflight 2026.6.2, but the workaround
-is not an official Betaflight release. The bench experiment worked; operation of
-the custom firmware on the aircraft still needs to be confirmed.
+**Hardware tested:** on 15 October 2026, the owner reported that the custom
+firmware worked on their O4/flight-controller setup and the original issues
+were resolved. It is based on stable Betaflight 2026.6.2, but is a community
+workaround rather than an official release. Other setups still need testing.
 
 ## 1. Get firmware for your flight controller
 

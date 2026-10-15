@@ -83,11 +83,12 @@ and `MSP_STATUS` conveyed armed/disarmed state. Other tested commands did not
 produce a visible effect. That does not establish that those commands were
 rejected, nor that these two commands suffice for every DJI device/firmware.
 
-This demonstrates acceptance of the tested unsolicited replies. Compilation
-and automated tests also passed for the firmware implementation, but successful
-operation of the custom firmware on the physical FC/O4 has not been confirmed
-in the published evidence. Low-power exit and automatic recording must be
-checked explicitly on the installed firmware. Flight validation is not claimed.
+This demonstrates acceptance of the tested unsolicited replies. On 15 October
+2026, the owner additionally reported testing the custom firmware on the physical
+FC/O4, with the original issues resolved and no problems reported. This is an
+operator-reported successful hardware test on that setup, not evidence that all
+similar symptoms share a cause or that all O4/goggles combinations work.
+Flight duration and a separate flight-validation result have not been reported.
 
 ## Implementation
 
@@ -221,8 +222,9 @@ The Python tests check the reproduction helper's payloads and state sequence.
 All 11 focused C/C++ tests and 3 Python tests passed for this branch. The three
 modified production C files also passed Arm compiler syntax checks using the
 HUMMINGBIRD_AIO255 build flags. Earlier HUMMINGBIRD_AIO255 firmware builds linked
-the implementation against the actual serializers; the custom firmware's
-physical FC/O4 behavior remains to be confirmed.
+the implementation against the actual serializers. The owner has since reported
+successful operation of the custom firmware on the physical FC/O4 (15 October
+2026), with the original issues resolved.
 
 For physical validation, use real FC telemetry with passthrough disabled and
 confirm native voltage matches the battery, real arm/disarm is recognized,
