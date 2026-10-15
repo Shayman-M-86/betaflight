@@ -10,6 +10,55 @@ not. It is disabled by default and is not an official Betaflight release.
 DisplayPort port, at up to 10 Hz each. No board-specific UART or build profile
 is required by the patch.
 
+## Start here
+
+This guide matches a specific symptom combination: video works, the Betaflight
+DisplayPort OSD displays live values, but DJI's separate native battery indicator
+shows 0 V and the O4 does not recognize arming. A missing OSD or an FC that itself
+reports zero battery voltage needs normal setup/hardware troubleshooting first.
+The same visible symptoms can have different causes.
+
+1. Back up the FC configuration and identify the exact FC board, firmware,
+   goggles and O4 firmware. Check the normal MSP/DisplayPort UART setup and
+   wiring before considering a custom firmware workaround.
+2. [Get this branch](#get-the-source). The fork's default `master` branch does
+   not contain the workaround; select `codex/o4-unsolicited-telemetry`.
+3. [Run the passthrough experiment](#reproduce-the-passthrough-experiment),
+   with props removed and O4 ventilation. This tests whether your O4 accepts
+   the responses without changing its FC firmware.
+4. If the synthetic battery and status replies produce the expected native
+   UI changes, [build the workaround](#build) for your exact FC board with
+   `USE_DJI_O4_TELEMETRY_PUSH` added to your normal build options.
+5. Load that local HEX, restore the required configuration, then run the
+   [physical validation](#automated-and-physical-validation) with real FC
+   values and passthrough disabled. Keep the original firmware for rollback.
+6. Share the results using the [report template](#report-results), including
+   failures and partial successes. Passing one experiment is not a universal fix.
+
+No stock-firmware CLI setting installs this patch. The code must be built from
+this branch. Adding its custom define to an upstream cloud build alone does not
+supply the code. Do not flash a firmware image made for somebody else's board.
+
+## Get the source
+
+```bash
+git clone --depth 1 --single-branch --branch codex/o4-unsolicited-telemetry https://github.com/Shayman-M-86/betaflight.git betaflight-o4-workaround
+cd betaflight-o4-workaround
+```
+
+For the build toolchain and host dependencies, follow the
+[Betaflight development instructions](https://betaflight.com/docs/development).
+Use the complete guide below rather than copying only a build define.
+
+## Exactly what changed
+
+- [Original implementation commit and complete diff](https://github.com/Shayman-M-86/betaflight/commit/0d11aff655704b10cabeb7457b37c0de28bf4fc8): a stable link to the code, tests, and original guide.
+- [Current workaround branch](https://github.com/Shayman-M-86/betaflight/tree/codex/o4-unsolicited-telemetry): the maintained guide and source.
+- [Serial task hook](src/main/fc/tasks.c): calls the opt-in timer.
+- [DisplayPort timer](src/main/io/displayport_msp.c): selects the configured port and schedules the two responses.
+- [MSP response helper](src/main/msp/msp_serial.c): reuses the live serializer and existing frame encoder with TX-space checks.
+- [Regression tests](src/test/unit/msp_serial_unittest.cc) and [bench reproduction helper](examples/o4_msp_passthrough.py).
+
 ## Evidence and limits
 
 The reported bench setup was a DJI O4 Air Unit Lite connected to a NewBeeDrone
@@ -187,3 +236,35 @@ whether maintainers want this capability and whether compile-time or runtime
 selection is appropriate. An upstream PR should be ported and tested against
 current master; this branch remains pinned to the release used in the experiment.
 The existing Betaflight license and contribution guidance apply.
+
+## Report results
+
+Reply in the public community discussion where this guide was shared. Include
+this information so people can distinguish similar symptoms with different
+causes. A video of the native battery/arming indicators is useful if available.
+
+```text
+Source commit / Betaflight version:
+FC board and MCU:
+O4 model and firmware:
+Goggles model and firmware:
+Receiver system:
+MSP/DisplayPort UART and baud rate:
+Original symptom (include whether Betaflight OSD worked):
+Passthrough BATTERY_STATE result:
+Passthrough STATUS result:
+Custom firmware tested? Which board build/options?
+Native voltage matches the real battery:
+Real arm/disarm recognized:
+Low-power exit on arm:
+Automatic recording starts/stops as expected:
+DisplayPort OSD still works:
+Other behavior / rollback result:
+```
+
+State whether a result came from synthetic passthrough replies or real telemetry
+on the custom firmware. Keep those observations separate. The
+[existing Betaflight O4 discussion](https://github.com/betaflight/betaflight/discussions/15412)
+reports similar symptoms, but its underlying fault has not been established as
+the same one. General hardware/setup support belongs in the community rather
+than a firmware bug report; see [Betaflight's contribution guidance](https://github.com/betaflight/betaflight/blob/master/CONTRIBUTING.md).
