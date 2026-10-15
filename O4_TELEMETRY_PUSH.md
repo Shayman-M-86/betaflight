@@ -244,7 +244,7 @@ The existing Betaflight license and contribution guidance apply.
 
 ## Report results
 
-Reply in the public community discussion where this guide was shared. Include
+Reply in [the main workaround discussion](https://github.com/betaflight/betaflight/discussions/15847). Include
 this information so people can distinguish similar symptoms with different
 causes. A video of the native battery/arming indicators is useful if available.
 

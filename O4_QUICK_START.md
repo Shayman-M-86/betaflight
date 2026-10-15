@@ -24,8 +24,8 @@ with this O4 workaround included. It also needs your usual receiver and other
 required features.
 
 **There are no public ready-to-download firmware releases yet.** If you do not
-already have a matching file, ask for a board-specific build in the community
-thread where you found this guide. Include:
+already have a matching file, ask for a board-specific build in
+[the workaround discussion](https://github.com/betaflight/betaflight/discussions/15847). Include:
 
 - Your exact flight controller model.
 - The output of `version` in Betaflight's CLI tab.
@@ -86,7 +86,8 @@ behaves unexpectedly, stop testing and restore the original firmware and backup.
 ## If it does not work
 
 Check that you used the correct custom file and restored the O4's UART settings.
-Then reply in the community thread with your FC, O4 and goggles models/firmware,
+Then reply in [the workaround discussion](https://github.com/betaflight/betaflight/discussions/15847)
+with your FC, O4 and goggles models/firmware,
 and which checks above passed or failed. Similar symptoms can have different
 causes, so this will not fix every O4 problem or repair damaged hardware.
 
